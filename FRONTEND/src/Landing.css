@@ -1,0 +1,238 @@
+/* --- CONTENEDOR PRINCIPAL --- */
+.main-scrollable {
+  width: 100%;
+  min-height: 100vh;
+  padding-top: 100px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  overflow-y: auto;
+}
+
+.content-wrapper {
+  width: 100%;
+  max-width: 1300px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 24px 100px 24px;
+}
+
+/* --- HERO SECTION --- */
+.hero-section {
+  width: 100%;
+  padding: 40px 0;
+  text-align: center;
+}
+
+.glitch {
+  font-family: 'Orbitron';
+  font-size: 5rem;
+  margin: 0;
+  text-shadow: 4px 4px var(--neon-pink), -4px -4px var(--neon-blue);
+  text-transform: uppercase;
+  animation: colorCycle 4s infinite linear;
+}
+
+.hero-subtitle {
+  font-family: 'Press Start 2P';
+  color: var(--neon-green);
+  margin-top: 20px;
+  font-size: 14px;
+  letter-spacing: 1px;
+}
+
+/* --- GRILLA DE PRODUCTOS --- */
+.items-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 320px));
+  gap: 30px;
+  justify-content: center;
+  width: 100%;
+  margin-top: 40px;
+}
+
+/* --- LA TARJETA (Look Sastrería) --- */
+.gamer-card {
+  position: relative; 
+  background: #FFFFFF !important;
+  border: 1px solid #D7CCC8; /* Borde color crema/café */
+  border-radius: 0px; 
+  transition: 0.4s ease-in-out;
+  overflow: hidden;
+}
+
+.gamer-card:hover {
+  transform: translateY(-8px);
+  border-color: #5D4037; /* Marrón más fuerte al hover */
+  box-shadow: 0 12px 25px rgba(62, 39, 35, 0.1);
+}
+
+/* --- AJUSTE DE IMAGEN --- */
+.image-container {
+  position: relative; /* Cambiado de absolute para que no tape el texto si hay error */
+  width: 100%;
+  height: 250px;
+  background: #F4F1ED;
+  overflow: hidden;
+}
+
+.image-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.gamer-card:hover .image-container img {
+  transform: scale(1.1);
+  filter: brightness(0.7);
+}
+
+/* --- DEGRADADO REFORZADO PARA CONTRASTE NEUTRO --- */
+.gamer-card::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 85%; /* Sube más para proteger el texto */
+  background: linear-gradient(to top, 
+    rgba(5, 1, 16, 1) 0%, 
+    rgba(5, 1, 16, 0.85) 35%, 
+    rgba(5, 1, 16, 0.4) 60%,
+    transparent 100%);
+  z-index: 2;
+  pointer-events: none;
+}
+
+/* --- ETIQUETA DE PRECIO --- */
+.price-tag {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: var(--neon-green);
+  color: black;
+  padding: 6px 12px;
+  font-family: 'Press Start 2P';
+  font-size: 10px;
+  z-index: 10;
+  box-shadow: 0 0 10px var(--neon-green);
+  border-radius: 2px;
+}
+
+/* --- TEXTOS (CONTRASTE MEJORADO) --- */
+.gamer-card h3, .company, .buy-button {
+  position: relative;
+  z-index: 3;
+  padding: 0 20px;
+}
+
+/* --- TEXTOS --- */
+.gamer-card h3 {
+  font-family: 'serif' !important;
+  color: #1A1A1A !important;
+  text-transform: none !important; /* Menos grito, más clase */
+  font-weight: 400;
+  text-shadow: none !important;
+}
+
+.company {
+  color: #8E735B !important; /* Dorado para la categoría */
+  font-family: 'serif';
+  font-style: italic;
+  letter-spacing: 1px !important;
+}
+
+/* --- BOTÓN --- */
+.buy-button {
+  margin: 0 20px 20px 20px; 
+  width: calc(100% - 40px);
+  height: 40px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--neon-pink);
+  color: #fff;
+  font-family: 'Press Start 2P';
+  font-size: 8px;
+  letter-spacing: 1px;
+  cursor: pointer;
+  transition: 0.3s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-transform: uppercase;
+}
+
+/* --- BOTONES --- */
+.filter-btn:hover {
+  background: #3E2723 !important;
+  color: #F4F1ED !important;
+}
+
+.buy-button:hover {
+  background: #5D4037 !important; /* Marrón cuero más claro */
+  box-shadow: none !important;
+}
+
+/* --- ESTADOS DE CARGA --- */
+.loading-text {
+  font-family: 'Press Start 2P';
+  text-align: center;
+  margin-top: 100px;
+  color: var(--neon-blue);
+  animation: colorCycle 2s infinite linear;
+}
+
+/* --- RESPONSIVE --- */
+@media (max-width: 768px) {
+  .glitch { font-size: 2.5rem; }
+  .items-grid { grid-template-columns: 1fr; padding: 10px; }
+}
+
+.price-container {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  z-index: 10;
+}
+
+.old-price {
+  text-decoration: line-through;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 10px;
+  font-family: 'Press Start 2P';
+}
+
+/* --- PRECIOS (Verde Inglés y Azul Sastre) --- */
+.current-price {
+  padding: 6px 12px !important;
+  font-family: 'serif' !important;
+  font-weight: bold;
+  letter-spacing: 1px;
+  border-radius: 0 !important;
+}
+
+/* El badge de descuento ahora es un marrón "Etiqueta de cuero" */
+.discount-badge {
+  background: #8D6E63 !important;
+  color: white !important;
+  padding: 3px 8px;
+  font-size: 11px;
+  font-weight: bold;
+  margin-top: 5px;
+}
+
+@keyframes pulse {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.1); box-shadow: 0 0 15px var(--neon-pink); }
+  100% { transform: scale(1); }
+}
+
+/* Eliminamos animaciones neón que ya no van */
+@keyframes colorCycle {
+  0% { color: #3E2723; }
+  50% { color: #8D6E63; }
+  100% { color: #3E2723; }
+}
