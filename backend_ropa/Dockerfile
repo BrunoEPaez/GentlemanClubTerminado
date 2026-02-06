@@ -1,36 +1,44 @@
-# Fase de construcción usando la imagen oficial de Go
+# Fase 1: Construcción (Builder)
+# Usamos la versión 1.24 que es la que requieren tus librerías más recientes
 FROM golang:1.24-alpine AS builder
 
+# Establecer el directorio de trabajo
 WORKDIR /app
 
-# Instalar git por si alguna dependencia lo necesita
+# Instalar git (algunas dependencias de Go lo requieren para descargarse)
 RUN apk add --no-cache git
 
-# Copiar archivos de dependencia
+# Copiar archivos de definición de módulos
 COPY go.mod go.sum ./
-RUN go mod download
 
-# Copiar el código fuente
+# Limpiar y descargar dependencias 
+# Esto arregla el error de "updates to go.mod needed" automáticamente
+RUN go mod tidy && go mod download
+
+# Copiar el resto del código fuente
 COPY . .
 
-# Compilar la aplicación (el binario se llamará 'main')
-RUN go build -o main .
+# Compilar el binario optimizado para producción
+# -ldflags="-w -s" reduce el tamaño del ejecutable
+RUN go build -ldflags="-w -s" -o main .
 
-# Fase final (Imagen súper ligera)
+# Fase 2: Imagen de ejecución (Runtime)
+# Usamos una imagen mínima para que el despliegue sea rápido
 FROM alpine:latest
+
 WORKDIR /app
 
-# Instalar certificados (necesarios para conectar con Supabase/HTTPS)
+# Instalar certificados CA para permitir conexiones seguras (HTTPS) a Supabase
 RUN apk --no-cache add ca-certificates
 
-# Copiar el binario desde la fase de construcción
+# Copiar solo el binario compilado desde la fase anterior
 COPY --from=builder /app/main .
 
-# Crear carpeta de uploads
+# Crear la carpeta de imágenes para evitar errores de ruta
 RUN mkdir uploads
 
-# Exponer el puerto
+# Exponer el puerto que configuramos en main.go
 EXPOSE 8080
 
-# Comando para arrancar
+# Comando para iniciar la aplicación
 CMD ["./main"]
