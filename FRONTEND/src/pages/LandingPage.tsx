@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080';
+
 const LandingPage = ({ products, loading, addToCart, cart, isMaintenance }: any) => {
   const [categoryFilter, setCategoryFilter] = useState('TODOS');
   const [page, setPage] = useState(1);

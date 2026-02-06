@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import '../ExplorarPage.css'; 
 
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080';
+
 const ExplorarPage = ({ products, addToCart, cart, isMaintenance, loading }: any) => {
   const location = useLocation(); 
   const [category, setCategory] = useState('TODOS');

@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef, useCallback } from 'react';
 import axios from 'axios';
-import { Routes, Route, useNavigate, Navigate } from 'react-router-dom';
+import { Routes, Route, useNavigate } from 'react-router-dom';
 import './App.css';
 import './Global.css';      // Agregado
 import './Landing.css';     // Agregado
@@ -117,7 +117,7 @@ export default function App() {
   }, [showNavMenu]);
 
 
-const handleLogin = async (email, password) => {
+const handleLogin = async (email: any, password: any) => {
   try {
     const res = await axios.post(`${API_URL}/api/login`, { email, password });
     const user = res.data;
