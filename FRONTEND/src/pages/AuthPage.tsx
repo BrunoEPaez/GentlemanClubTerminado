@@ -27,28 +27,23 @@ const AuthPage = ({ onLogin }: any) => {
       return;
     }
 
-    // ESTRUCTURA PARA GO: Enviamos email y password directamente
     const userData = { email, password };
 
     try {
       if (!isLogin) {
         // --- REGISTRO ---
         const response = await axios.post(`${API_URL}/api/register`, userData);
-        // Guardamos con la clave 'gentleman-user' para que coincida con App y Navbar
         localStorage.setItem('gentleman-user', JSON.stringify(response.data));
         alert("¡CUENTA CREADA EXITOSAMENTE!");
+        navigate('/');
+        window.location.reload(); 
       } else {
         // --- LOGIN ---
-        // Cambiamos /api/signup por /api/login (que es la que pusimos en Go)
-        const response = await axios.post(`${API_URL}/api/login`, userData);
-        localStorage.setItem('gentleman-user', JSON.stringify(response.data));
-        alert("¡BIENVENIDO DE VUELTA!");
+        // Usamos la función onLogin que viene de App.tsx para que 
+        // TypeScript no dé error y el estado global se actualice.
+        await onLogin(email, password);
       }
-      
-      navigate('/');
-      window.location.reload(); 
     } catch (error: any) {
-      // Manejo de errores de Go
       const msg = error.response?.data?.error || "Error de conexión con el servidor";
       alert("ERROR: " + msg);
     }
