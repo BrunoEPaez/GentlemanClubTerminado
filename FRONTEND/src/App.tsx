@@ -24,7 +24,7 @@ export default function App() {
   const [loading, setLoading] = useState(true);
   const [showNavMenu, setShowNavMenu] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
-  const [notifications, setNotifications] = useState<any[]>([]);
+  const [notifications] = useState<any[]>([]);
   const [searchTerm, setSearchTerm] = useState("");
   const navigate = useNavigate();
   const [isAdmin, setIsAdmin] = useState(() => {

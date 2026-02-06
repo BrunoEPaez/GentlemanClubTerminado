@@ -4,7 +4,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080';
 
-const AuthPage = () => {
+const AuthPage = ({ onLogin }: any) => {
   const [isLogin, setIsLogin] = useState(true);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
