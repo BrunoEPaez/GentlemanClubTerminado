@@ -1,5 +1,5 @@
 # Fase de construcción usando la imagen oficial de Go
-FROM golang:1.23-alpine AS builder
+FROM golang:1.24-alpine AS builder
 
 WORKDIR /app
 
