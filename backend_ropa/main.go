@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	"net/http"
-	"os" // Necesario para eliminar archivos físicos
+	"os" // Necesario para eliminar archivos físicos y leer el puerto
 	"strconv"
 	"time"
 )
@@ -84,15 +84,21 @@ func main() {
 	ConnectDatabase()
 	SeedDatabase()
 
+	// Configurar modo Release si estamos en producción
+	if os.Getenv("GIN_MODE") == "release" {
+		gin.SetMode(gin.ReleaseMode)
+	}
+
 	r := gin.Default()
 	
 	r.MaxMultipartMemory = 32 << 20 
 	r.Static("/uploads", "./uploads")
 
+	// --- MIDDLEWARE CORS ---
 	r.Use(func(c *gin.Context) {
 		c.Writer.Header().Set("Access-Control-Allow-Origin", "*")
 		c.Writer.Header().Set("Access-Control-Allow-Methods", "POST, OPTIONS, GET, PUT, DELETE")
-		c.Writer.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization")
+		c.Writer.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization, X-Requested-With")
 		if c.Request.Method == "OPTIONS" {
 			c.AbortWithStatus(204)
 			return
@@ -126,7 +132,7 @@ func main() {
 		}
 		var user User
 		if err := DB.Where("email = ? AND password = ?", body.Email, body.Password).First(&user).Error; err != nil {
-			c.JSON(401, gin.H{"error": "No autorizado"})
+			c.JSON(401, gin.H{"error": "Credenciales incorrectas"})
 			return
 		}
 		c.JSON(200, user)
@@ -188,7 +194,6 @@ func main() {
 				}
 			}
 		}
-
 		c.JSON(http.StatusOK, newProduct)
 	})
 
@@ -225,49 +230,35 @@ func main() {
 				}
 			}
 		}
-
 		c.JSON(http.StatusOK, product)
 	})
 
-	// --- ELIMINACIÓN CON LIMPIEZA DE ARCHIVOS ---
 	r.DELETE("/api/products/:id", func(c *gin.Context) {
 		id := c.Param("id")
 		var product Product
 
-		// 1. Obtener datos antes de borrar de la DB (Preload Gallery es vital aquí)
 		if err := DB.Preload("Gallery").First(&product, id).Error; err != nil {
 			c.JSON(404, gin.H{"error": "Producto no encontrado"})
 			return
 		}
 
-		// Función interna para borrar archivos físicos
 		removePhysicalFile := func(url string) {
 			if url != "" {
 				filePath := "." + url
-				if err := os.Remove(filePath); err != nil {
-					fmt.Printf("Aviso: No se pudo borrar el archivo %s: %v\n", filePath, err)
-				} else {
-					fmt.Printf("Archivo eliminado del disco: %s\n", filePath)
-				}
+				os.Remove(filePath) 
 			}
 		}
 
-		// 2. Borrar imagen principal
 		removePhysicalFile(product.Image)
-
-		// 3. Borrar imágenes de la galería
 		for _, img := range product.Gallery {
 			removePhysicalFile(img.URL)
 		}
 
-		// 4. Borrar de la Base de Datos (Relaciones primero)
 		DB.Where("product_id = ?", id).Delete(&ProductImage{})
 		DB.Delete(&Product{}, id)
-
-		c.JSON(http.StatusOK, gin.H{"message": "Producto y archivos eliminados con éxito"})
+		c.JSON(http.StatusOK, gin.H{"message": "Eliminado con éxito"})
 	})
 
-	// --- CHECKOUT ---
 	r.POST("/api/checkout", func(c *gin.Context) {
 		var req CheckoutRequest
 		if err := c.ShouldBindJSON(&req); err != nil {
@@ -303,5 +294,10 @@ func main() {
 		c.JSON(http.StatusOK, gin.H{"status": "success"})
 	})
 
-	r.Run(":8080")
+	// --- ARRANQUE DINÁMICO ---
+	port := os.Getenv("PORT")
+	if port == "" {
+		port = "8080"
+	}
+	r.Run(":" + port)
 }
