@@ -19,7 +19,7 @@ const ProductDetail = ({ products, addToCart, isMaintenance }: any) => {
     );
   }
 
-  const API_URL = "http://localhost:8080";
+  const API_URL = import.meta.env.VITE_API_URL || "http://localhost:8080";
   
   // Imagen principal del producto
   const mainImg = product.image ? `${API_URL}${product.image}` : 'https://via.placeholder.com/500';

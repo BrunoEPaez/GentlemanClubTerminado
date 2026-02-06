@@ -92,7 +92,7 @@ const ExplorarPage = ({ products, addToCart, cart, isMaintenance, loading }: any
                 <div key={p.id} className="product-card-gentleman">
                   <Link to={`/producto/${p.id}`} className="image-wrapper" style={{ position: 'relative', display: 'block' }}>
                     <img 
-                      src={p.image ? `http://localhost:8080${p.image}` : 'https://via.placeholder.com/300'} 
+                      src={p.image ? `${API_URL}${p.image}` : 'https://via.placeholder.com/300'} 
                       alt={p.name} 
                     />
                     {/* CARTELITO DE OFERTA AÑADIDO (Igual a LandingPage) */}

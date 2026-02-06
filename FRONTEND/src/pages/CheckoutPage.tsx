@@ -6,7 +6,7 @@ const CheckoutPage = ({ cart, removeFromCart, clearCart, fetchProducts }: any) =
   const [isProcessing, setIsProcessing] = useState(false);
   const navigate = useNavigate();
   
-  const API_BASE_URL = "http://localhost:8080";
+  const API_BASE_URL = import.meta.env.VITE_API_URL || "http://localhost:8080";
 
   const total = cart.reduce((acc: number, item: any) => {
     const basePrice = Number(item.price) || 0;

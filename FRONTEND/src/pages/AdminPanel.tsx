@@ -33,7 +33,7 @@ const AdminPanel = ({ products, isMaintenance, setIsMaintenance }: any) => {
 
   const fetchSales = async () => {
     try {
-      const res = await axios.get('http://localhost:8080/api/sales');
+      const res = await axios.get(`${API_URL}/api/sales`);
       setSales(res.data || []);
     } catch (e) {
       console.error("Error cargando ventas", e);
@@ -110,10 +110,10 @@ const AdminPanel = ({ products, isMaintenance, setIsMaintenance }: any) => {
       };
 
       if (isEditing && editingId) {
-        await axios.put(`http://localhost:8080/api/products/${editingId}`, formData, config);
+        await axios.put(`${API_URL}/api/products/${editingId}`, formData, config);
         alert("PRODUCTO ACTUALIZADO");
       } else {
-        await axios.post('http://localhost:8080/api/products', formData, config);
+        await axios.post(`${API_URL}/api/products`, formData, config);
         alert("PRODUCTO CREADO");
       }
       window.location.reload();
@@ -125,7 +125,7 @@ const AdminPanel = ({ products, isMaintenance, setIsMaintenance }: any) => {
   const toggleMaintenance = async () => {
     const nuevoEstado = !isMaintenance;
     try {
-      await axios.post(`http://localhost:8080/api/settings/maintenance`, { value: nuevoEstado });
+      await axios.post(`${API_URL}/api/settings/maintenance`, { value: nuevoEstado });
       setIsMaintenance(nuevoEstado);
     } catch (e) {
       alert("Error al cambiar modo mantenimiento");
@@ -135,7 +135,7 @@ const AdminPanel = ({ products, isMaintenance, setIsMaintenance }: any) => {
   const handleDelete = async (id: number) => {
     if (window.confirm("¿ELIMINAR PRODUCTO?")) {
       try {
-        await axios.delete(`http://localhost:8080/api/products/${id}`);
+        await axios.delete(`${API_URL}/api/products/${id}`);
         window.location.reload();
       } catch (error) {
         alert("ERROR AL ELIMINAR");
@@ -264,7 +264,7 @@ const AdminPanel = ({ products, isMaintenance, setIsMaintenance }: any) => {
                     <td style={{ padding: '15px', color: '#8E735B' }}>#{p.id}</td>
                     <td>
                       {p.image ? (
-                        <img src={`http://localhost:8080${p.image}`} width="40" alt="" />
+                        <img src={`${API_URL}${p.image}`} width="40" alt="" />
                       ) : (
                         <div style={{ width: 40, height: 40, background: '#ccc' }} />
                       )}

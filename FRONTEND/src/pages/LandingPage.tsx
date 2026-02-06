@@ -122,7 +122,7 @@ const LandingPage = ({ products, loading, addToCart, cart, isMaintenance }: any)
                 }}>
                   <Link to={`/producto/${p.id}`} style={{ display: 'block', height: '350px', overflow: 'hidden', position: 'relative' }}>
                     <img 
-                      src={p.image ? `http://localhost:8080${p.image}` : 'https://via.placeholder.com/300'} 
+                      src={p.image ? `${API_URL}${p.image}` : 'https://via.placeholder.com/300'} 
                       alt={p.name} 
                       style={{ width: '100%', height: '100%', objectFit: 'cover' }} 
                     />

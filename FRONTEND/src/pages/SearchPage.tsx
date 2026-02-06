@@ -77,7 +77,7 @@ const SearchPage = ({ products, searchTerm, addToCart, cart, isMaintenance }: an
                   {/* WRAPPER DE IMAGEN CON ETIQUETA DE OFERTA */}
                   <Link to={`/producto/${p.id}`} className="image-wrapper" style={{ height: '350px', position: 'relative', display: 'block', overflow: 'hidden' }}>
                     <img 
-                      src={p.image ? `http://localhost:8080${p.image}` : 'https://via.placeholder.com/300'} 
+                      src={p.image ? `${API_URL}${p.image}` : 'https://via.placeholder.com/300'} 
                       alt={p.name} 
                       style={{ width: '100%', height: '100%', objectFit: 'cover' }}
                     />

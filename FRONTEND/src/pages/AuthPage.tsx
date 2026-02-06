@@ -31,14 +31,14 @@ const AuthPage = () => {
     try {
       if (!isLogin) {
         // --- REGISTRO ---
-        const response = await axios.post('http://localhost:8080/api/register', userData);
+        const response = await axios.post(`${API_URL}/api/register`, userData);
         // Guardamos con la clave 'gentleman-user' para que coincida con App y Navbar
         localStorage.setItem('gentleman-user', JSON.stringify(response.data));
         alert("¡CUENTA CREADA EXITOSAMENTE!");
       } else {
         // --- LOGIN ---
         // Cambiamos /api/signup por /api/login (que es la que pusimos en Go)
-        const response = await axios.post('http://localhost:8080/api/login', userData);
+        const response = await axios.post(`${API_URL}/api/login`, userData);
         localStorage.setItem('gentleman-user', JSON.stringify(response.data));
         alert("¡BIENVENIDO DE VUELTA!");
       }

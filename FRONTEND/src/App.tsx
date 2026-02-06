@@ -17,6 +17,8 @@ import SearchPage from './pages/SearchPage';
 import AuthPage from './pages/AuthPage';
 import AdminPanel from './pages/AdminPanel';
 
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8080';
+
 export default function App() {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -43,7 +45,7 @@ export default function App() {
   // --- 1. DEFINIR LA FUNCIÓN QUE FALTABA ---
   const fetchProducts = useCallback(async () => {
     try {
-      const res = await axios.get('http://localhost:8080/api/products');
+      const res = await axios.get(`${API_URL}/api/products`);
       setProducts(res.data);
       setLoading(false);
     } catch (err) {
@@ -57,7 +59,7 @@ export default function App() {
     const checkMaintenance = async () => {
       try {
         // Consultamos el registro con key 'maintenance_mode'
-        const res = await axios.get('http://localhost:8080/api/settings/maintenance_mode');
+        const res = await axios.get(`${API_URL}/api/settings/maintenance_mode`);
         setIsMaintenance(res.data.value);
       } catch (e) {
         console.error("Error al leer modo mantenimiento", e);
@@ -117,7 +119,7 @@ export default function App() {
 
 const handleLogin = async (email, password) => {
   try {
-    const res = await axios.post('http://localhost:8080/api/login', { email, password });
+    const res = await axios.post(`${API_URL}/api/login`, { email, password });
     const user = res.data;
     
     // Guardamos el usuario (esto es lo que habilita que isAdmin sea true o que el panel cargue)
@@ -198,7 +200,7 @@ const handleLogin = async (email, password) => {
     element={<SearchPage products={products} searchTerm={searchTerm} addToCart={addToCart} isMaintenance={isMaintenance} />} 
   />
 
-  <Route path="/auth" element={<AuthPage />} />
+  <Route path="/auth" element={<AuthPage onLogin={handleLogin} />} />
 
   <Route 
     path="/checkout" 
